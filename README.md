@@ -59,15 +59,16 @@ Return True if the effects of either action negate the preconditions of the othe
             (1) `~Literal` can be used to logically negate a literal
             (2) `self.parents` contains a map from actions to preconditions
 
-        ```
-        for effectA in actionA.effects:
-            if ~effectA in actionB.preconditions: return True
- 
-        for effectB in actionB.effects:
-            if ~effectB in actionA.preconditions: return True
- 
-        return False
-        ```
+    ```python
+    def _interference(self, actionA, actionB):
+      for effectA in actionA.effects:
+        if ~effectA in actionB.preconditions: return True
+
+      for effectB in actionB.effects:
+        if ~effectB in actionA.preconditions: return True
+
+      return False
+    ```
 
 #### function _competing_needs
 
