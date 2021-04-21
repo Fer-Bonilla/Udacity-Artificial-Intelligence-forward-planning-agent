@@ -105,10 +105,10 @@ Return True if all ways to achieve both literals are pairwise mutex in the paren
 #### function _negation
 Return True if two literals are negations of each other
 
-          ```
-          if literalA == ~literalB: return True
-          else: return False
-          ```
+  ```Python
+  if literalA == ~literalB: return True
+  else: return False
+  ```
 
 
 ### Planning Graph heuristics implementations
