@@ -52,22 +52,23 @@ def _inconsistent_effects(self, actionA, actionB):
 ```
 
 #### function _interference
-Return True if the effects of either action negate the preconditions of the other 
 
-        Hints:
-            (1) `~Literal` can be used to logically negate a literal
-            (2) `self.parents` contains a map from actions to preconditions
+  Return True if the effects of either action negate the preconditions of the other 
 
-    ```python
-    def _interference(self, actionA, actionB):
-      for effectA in actionA.effects:
-        if ~effectA in actionB.preconditions: return True
+  Hints:
+    (1) `~Literal` can be used to logically negate a literal
+    (2) `self.parents` contains a map from actions to preconditions
 
-      for effectB in actionB.effects:
-        if ~effectB in actionA.preconditions: return True
+```python
+def _interference(self, actionA, actionB):
+  for effectA in actionA.effects:
+    if ~effectA in actionB.preconditions: return True
 
-      return False
-    ```
+  for effectB in actionB.effects:
+    if ~effectB in actionA.preconditions: return True
+
+  return False
+```
 
 #### function _competing_needs
 
