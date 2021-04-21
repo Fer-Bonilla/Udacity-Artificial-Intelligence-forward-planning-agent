@@ -86,28 +86,30 @@ Return True if the preconditions of the actions are all pairwise mutex in the pa
 ### Literal layer
 
 #### function _inconsistent_support
-Return True if all ways to achieve both literals are pairwise mutex in the parent layer
 
-        Hints:
-            (1) `self.parent_layer` contains a reference to the previous action layer
-            (2) `self.parents` contains a map from literals to actions in the parent layer
+  Return True if all ways to achieve both literals are pairwise mutex in the parent layer
 
-          ```
-          for parentA in self.parents[literalA]:
-                    for parentB in self.parents[literalB]:
-                              if not(self.parent_layer.is_mutex(parentB,parentA)):  
-                              return False
-          return True
-          ```
+  Hints:
+    (1) `self.parent_layer` contains a reference to the previous action layer
+    (2) `self.parents` contains a map from literals to actions in the parent layer
+
+``` python
+for parentA in self.parents[literalA]:
+          for parentB in self.parents[literalB]:
+                    if not(self.parent_layer.is_mutex(parentB,parentA)):  
+                    return False
+return True
+```
 
 
 #### function _negation
+
 Return True if two literals are negations of each other
 
-  ```Python
-  if literalA == ~literalB: return True
-  else: return False
-  ```
+```Python
+if literalA == ~literalB: return True
+else: return False
+```
 
 
 ### Planning Graph heuristics implementations
@@ -117,96 +119,97 @@ Return True if two literals are negations of each other
 
 Calculate the level sum heuristic for the planning graph
 
-        The level sum is the sum of the level costs of all the goal literals combined. The "level cost" to achieve any single goal literal is the         level at which the literal first appears in the planning graph. Note that the level cost is **NOT** the minimum number of actions to achieve a single goal literal.
+The level sum is the sum of the level costs of all the goal literals combined. The "level cost" to achieve any single goal literal is the         level at which the literal first appears in the planning graph. Note that the level cost is **NOT** the minimum number of actions to achieve a single goal literal.
         
-        For example, if Goal_1 first appears in level 0 of the graph (i.e., it is satisfied at the root of the planning graph) and Goal_2 first         appears in level 3, then the levelsum is 0 + 3 = 3.
+For example, if Goal_1 first appears in level 0 of the graph (i.e., it is satisfied at the root of the planning graph) and Goal_2 first         appears in level 3, then the levelsum is 0 + 3 = 3.
 
-        Hints
-        -----
-          (1) See the pseudocode folder for help on a simple implementation
-          (2) You can implement this function more efficiently than the sample pseudocode if you expand the graph one level at a time and accumulate the level cost of each goal rather than filling the whole graph at the start.
+Hints
+-----
+  (1) See the pseudocode folder for help on a simple implementation
+  (2) You can implement this function more efficiently than the sample pseudocode if you expand the graph one level at a time and accumulate the level cost of each goal rather than filling the whole graph at the start.
 
 
-          ```
-          self.fill()
-          cost_level_sum = 0
-          
-          for go in self.goal:
-                    for cost, layer in enumerate(self.literal_layers):
-                              if go in layer:
-                                        cost_level_sum += cost
-                              break
-          return cost_level_sum
-          ```
+```python
+self.fill()
+cost_level_sum = 0
+
+for go in self.goal:
+          for cost, layer in enumerate(self.literal_layers):
+                    if go in layer:
+                              cost_level_sum += cost
+                    break
+return cost_level_sum
+```
 
 #### function h_maxlevel
 
-Calculate the max level heuristic for the planning graph
+  Calculate the max level heuristic for the planning graph
 
-        The max level is the largest level cost of any single goal fluent. The "level cost" to achieve any single goal literal is the level at which the literal first appears in the planning graph. Note that the level cost is **NOT** the minimum number of actions to achieve a single goal literal.
+  The max level is the largest level cost of any single goal fluent. The "level cost" to achieve any single goal literal is the level at which the literal  first appears in the planning graph. Note that the level cost is **NOT** the minimum number of actions to achieve a single goal literal.
 
-        For example, if Goal1 first appears in level 1 of the graph and Goal2 first appears in level 3, then the levelsum is max(1, 3) = 3.
+  For example, if Goal1 first appears in level 1 of the graph and Goal2 first appears in level 3, then the levelsum is max(1, 3) = 3.
 
-        Hints
-        -----
-          (1) See the pseudocode folder for help on a simple implementation
-          (2) You can implement this function more efficiently if you expand the graph one level at a time until the last goal is met rather than filling the whole graph at the start.
+  Hints
+  -----
+    (1) See the pseudocode folder for help on a simple implementation
+    (2) You can implement this function more efficiently if you expand the graph one level at a time until the last goal is met rather than filling the whole graph at the start.
 
-```
-        self.fill()
-        level_cost = 0
-        for go in self.goal:
-            for cost, layer in enumerate(self.literal_layers):
-                if go in layer:
-                    level_cost = max(cost, level_cost)
-                    break
-        return level_cost
+```python
+self.fill()
+level_cost = 0
+for go in self.goal:
+    for cost, layer in enumerate(self.literal_layers):
+        if go in layer:
+            level_cost = max(cost, level_cost)
+            break
+return level_cost
 ```
 
 #### function h_setlevel
- Calculate the set level heuristic for the planning graph
 
-        The set level of a planning graph is the first level where all goals appear such that no pair of goal literals are mutex in the last layer of the planning graph.
+  Calculate the set level heuristic for the planning graph
 
-        Hints
-        -----
-          (1) See the pseudocode folder for help on a simple implementation
-          (2) You can implement this function more efficiently if you expand the graph one level at a time until you find the set level rather than filling the whole graph at the start.
+  The set level of a planning graph is the first level where all goals appear such that no pair of goal literals are mutex in the last layer of the planning graph.
 
-          ```
-               _graph = self
-                  currentLevel = 0
-                  _goals = [goal for goal in _graph.goal]
-                  setLevelFound = False
+  Hints
+  -----
+    (1) See the pseudocode folder for help on a simple implementation
+    (2) You can implement this function more efficiently if you expand the graph one level at a time until you find the set level rather than filling the whole graph at the start.
 
-                  while not(setLevelFound):
-                      concurrentGoals = True
-                      mutexGoals = False
+```python
+_graph = self
+  currentLevel = 0
+  _goals = [goal for goal in _graph.goal]
+  setLevelFound = False
 
-                      _level = _graph.literal_layers[currentLevel]
+  while not(setLevelFound):
+      concurrentGoals = True
+      mutexGoals = False
 
-                      for goal in _graph.goal:
-                          if goal not in _level: 
-                              concurrentGoals = False
-                              break
+      _level = _graph.literal_layers[currentLevel]
 
-                      if concurrentGoals:
-                          for goalA in _graph.goal:
-                              for goalB in _graph.goal:
-                                  if _level.is_mutex(goalA, goalB): 
-                                      mutexGoals = True
-                                      break                          
-                              if mutexGoals: break
+      for goal in _graph.goal:
+          if goal not in _level: 
+              concurrentGoals = False
+              break
 
-                      if concurrentGoals and not(mutexGoals):
-                          setLevelFound = True
+      if concurrentGoals:
+          for goalA in _graph.goal:
+              for goalB in _graph.goal:
+                  if _level.is_mutex(goalA, goalB): 
+                      mutexGoals = True
+                      break                          
+              if mutexGoals: break
 
-                      if not(concurrentGoals) or mutexGoals:
-                          _graph._extend()
-                          currentLevel += 1
+      if concurrentGoals and not(mutexGoals):
+          setLevelFound = True
 
-                  return currentLevel
-          ```
+      if not(concurrentGoals) or mutexGoals:
+          _graph._extend()
+          currentLevel += 1
+
+  return currentLevel
+```
 
 ## Running the experiments
 
