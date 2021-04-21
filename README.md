@@ -25,13 +25,11 @@ The project structure is based on the Udacity's project template:
                               + search.pyc
                               + utils.py          
 + tests                       + test_my_planning_graph.py:  Test cases for my_planning_graph implementation
-
-+ _utils.py
++ _utils.py                                                 Utility functions used
 + air_cargo_problems.py:                                    Contains the cargo problem scenarios 
-+ layers.py
++ layers.py                                                 Layers implementation
 + my_panning_graph.py:                                      Planning implementation 
 + run_search.py:                                            Main script to run the simulation          
-
 ```
 
 ## Functions developed
@@ -39,18 +37,19 @@ The project structure is based on the Udacity's project template:
 ###Action layer functions
 
 #### function _inconsistent_effects
-Return True if an effect of one action negates an effect of the other
-        Hints:
-            (1) `~Literal` can be used to logically negate a literal
-            (2) `self.children` contains a map from actions to effects
+  Return True if an effect of one action negates an effect of the other
 
-          ```python
-          def _inconsistent_effects(self, actionA, actionB):
-              for effectA in actionA.effects:       
-                  for effectB in actionB.effects:
-                      if effectA == ~effectB:
-                          return True
-          ```
+  Hints:
+    (1) `~Literal` can be used to logically negate a literal
+    (2) `self.children` contains a map from actions to effects
+
+```python
+def _inconsistent_effects(self, actionA, actionB):
+    for effectA in actionA.effects:       
+        for effectB in actionB.effects:
+            if effectA == ~effectB:
+                return True
+```
 
 #### function _interference
 Return True if the effects of either action negate the preconditions of the other 
