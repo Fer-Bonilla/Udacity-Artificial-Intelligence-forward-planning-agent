@@ -27,7 +27,7 @@ The project structure is based on the Udacity's project template:
 + tests                       + test_my_planning_graph.py:  Test cases for my_planning_graph implementation
 
 + _utils.py
-+ air_cargo_problems.py:                                    Contains the cargo problme scenarios 
++ air_cargo_problems.py:                                    Contains the cargo problem scenarios 
 + layers.py
 + my_panning_graph.py:                                      Planning implementation 
 + run_search.py:                                            Main script to run the simulation          
@@ -73,17 +73,14 @@ Return True if the effects of either action negate the preconditions of the othe
 
 Return True if the preconditions of the actions are all pairwise mutex in the parent layer 
 
-```python
-def _competing_needs(self, actionA, actionB):
-    
-    for preconditionA in actionA.preconditions:
+  ```python
+  def _competing_needs(self, actionA, actionB):    
+      for preconditionA in actionA.preconditions:
+          for preconditionB in actionB.preconditions:
+              if self.parent_layer.is_mutex(preconditionA, preconditionB):
+                  return True
 
-        for preconditionB in actionB.preconditions:
-
-            if self.parent_layer.is_mutex(preconditionA, preconditionB):
-                return True
-
-```
+  ```
 
 
 ### Literal layer
