@@ -178,38 +178,19 @@ return level_cost
     (2) You can implement this function more efficiently if you expand the graph one level at a time until you find the set level rather than filling the whole graph at the start.
 
 ```python
-_graph = self
-  currentLevel = 0
-  _goals = [goal for goal in _graph.goal]
-  setLevelFound = False
-
-  while not(setLevelFound):
-      concurrentGoals = True
-      mutexGoals = False
-
-      _level = _graph.literal_layers[currentLevel]
-
-      for goal in _graph.goal:
-          if goal not in _level: 
-              concurrentGoals = False
-              break
-
-      if concurrentGoals:
-          for goalA in _graph.goal:
-              for goalB in _graph.goal:
-                  if _level.is_mutex(goalA, goalB): 
-                      mutexGoals = True
-                      break                          
-              if mutexGoals: break
-
-      if concurrentGoals and not(mutexGoals):
-          setLevelFound = True
-
-      if not(concurrentGoals) or mutexGoals:
-          _graph._extend()
-          currentLevel += 1
-
-  return currentLevel
+    while not self._is_leveled:   
+        layer = self.literal_layers[-1]
+        if self.goal.issubset(layer):
+            mutex = True
+            for go1 in self.goal:
+                for go2 in self.goal:
+                    if layer.is_mutex(go1, go2):
+                        mutex = False
+                        break
+            if mutex:
+                return len(self.literal_layers) - 1
+        self._extend()
+    return len(self.literal_layers) - 1  
 ```
 
 ## Running the experiments
