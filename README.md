@@ -215,10 +215,7 @@ $ python run_search.py -p 1 2 3 4 -s 1 2 3 4 5 6 7 8 9 10 11
 ## Results report
 
 
-
-
-
-
+[Results report document](https://github.com/Fer-Bonilla/Udacity-Artificial-Intelligence-forward-planning-agent/blob/main/report.pdf)
 
 
 ## Author 
